@@ -21,6 +21,7 @@ gem 'turbolinks'
 gem 'bootstrap-sass'
 gem 'figaro'
 gem 'haml'
+gem 'devise'
 
 group :development, :test do
   gem 'byebug'
