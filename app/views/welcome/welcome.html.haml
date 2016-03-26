@@ -8,14 +8,14 @@
           %h2 What's on your radar?
           %h4 Find what interests you and explore.
         <br>
-        =link_to "Sign Up", root_path, class: "btn btn-success"
+        =link_to "Sign Up", new_user_registration_path, class: "btn btn-success"
       .col-md-4
         =image_tag('radar.png', size: '250x250', class: "center-block")
       .col-md-4
         %div.landing
           %h2 It's personal.
           %h4 Keep track of what personally interests you.
-        =link_to "Sign In", root_path, class: "btn btn-success"
+        =link_to "Sign In", new_user_session_path, class: "btn btn-success"
 
 .container
   .jumbotron.lower
