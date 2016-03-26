@@ -1,0 +1,31 @@
+.container
+  .page-header
+    %h1 Welcome to Bliply!
+  .jumbotron.upper
+    .row
+      .col-md-4
+        %div.landing
+          %h2 What's on your radar?
+          %h4 Find what interests you and explore.
+        <br>
+        =link_to "Sign Up", root_path, class: "btn btn-success"
+      .col-md-4
+        =image_tag('radar.png', size: '250x250', class: "center-block")
+      .col-md-4
+        %div.landing
+          %h2 It's personal.
+          %h4 Keep track of what personally interests you.
+        =link_to "Sign In", root_path, class: "btn btn-success"
+
+.container
+  .jumbotron.lower
+    .row
+      .col-md-4
+        %h2 Personalized.
+        %h4 See & find what interests you.
+      .col-md-4
+        %h2 Private.
+        %h4 Go stealth yet stay connected.
+      .col-md-4
+        %h2 Community Boards
+        %h4 Stay up to date with your local community.
