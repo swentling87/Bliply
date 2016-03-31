@@ -11,6 +11,10 @@ end
 group :development, :test do
   gem 'sqlite3'
   gem 'pry'
+  gem 'byebug'
+  gem 'spring'
+  gem 'faker'
+  gem 'factory_girl_rails'
 end
 
 gem 'sass-rails', '~> 5.0'
@@ -23,12 +27,11 @@ gem 'figaro'
 gem 'haml'
 gem 'devise'
 
-group :development, :test do
-  gem 'byebug'
+group :test do
+  gem 'simplecov', require: false
+end
+group :development do
   gem 'web-console', '~> 2.0'
-  gem 'spring'
   gem 'rspec-rails'
   gem 'shoulda'
-  gem 'faker'
-  gem 'factory_girl_rails'
 end
