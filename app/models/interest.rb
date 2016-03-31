@@ -1,4 +1,6 @@
 class Interest < ActiveRecord::Base
-  belongs_to :location_able, polymorphic: true
-  belongs_to :user_able, polymorphic: true
+
+  has_many :interestables
+  has_many :users, through: :interestables
+  has_many :locations, through: :users
 end

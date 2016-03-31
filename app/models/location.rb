@@ -1,4 +1,5 @@
 class Location < ActiveRecord::Base
-  has_many :users, as: :user_able
-  has_many :interests, as: :interest_able
+  has_many :locationables
+  has_many :users, through: :locationables
+  has_many :interests, through: :users
 end

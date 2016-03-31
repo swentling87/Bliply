@@ -4,6 +4,9 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable, :confirmable, :lockable
 
-  has_many :interests, as: :interest_able
-  has_many :locations, as: :location_able
+  has_many :interestables
+  has_many :interests, through: :interestables
+  has_many :locationables
+  has_many :locations, through: :locationables
+
 end
