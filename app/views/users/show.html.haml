@@ -1,1 +1,43 @@
-%h1 User Profile, more to come soon!
+.page-header
+  %h1 User Profile
+.row
+  .col-md-8
+    %span.h2 My Information
+    %small
+      =link_to raw('<i class="glyphicon glyphicon-pencil">Edit</i>'), edit_info_user_path
+    .div.information
+      %h3 #{current_user.name}, #{current_user.age}, #{genderer(current_user.gender)}
+      %h4
+        #{current_user.email.capitalize}<br>
+        %small
+          Confirmed?:
+          - if current_user.confirmed?
+            <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span>
+          - else
+            <span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span>
+  .col-md-4
+    .div
+      %span.h2 Locations
+      %small
+        =link_to raw('<i class="glyphicon glyphicon-plus">Add</i>'), "x"
+        =link_to raw('<i class="glyphicon glyphicon-pencil">Edit</i>'), "x"
+        =link_to raw('<i class="glyphicon glyphicon-remove">Remove</i>'), "x"
+    <br>
+    .div.locations
+      - current_user.locations.each do |location|
+        %ul
+          %li #{location.zip_code}
+  .col-md-8
+    .div
+      %span.h2 Interests
+      %small
+        =link_to raw('<i class="glyphicon glyphicon-plus">Add</i>'), "x"
+        =link_to raw('<i class="glyphicon glyphicon-pencil">Edit</i>'), "x"
+        =link_to raw('<i class="glyphicon glyphicon-remove">Remove</i>'), "x"
+
+    <br>
+    .div.interests
+      - current_user.interests.each do |interest|
+        %ul
+          %li
+            #{interest.topic}
