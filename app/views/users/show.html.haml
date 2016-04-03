@@ -19,9 +19,8 @@
     .div
       %span.h2 Locations
       %small
-        =link_to raw('<i class="glyphicon glyphicon-plus">Add</i>'), "x"
-        =link_to raw('<i class="glyphicon glyphicon-pencil">Edit</i>'), "x"
-        =link_to raw('<i class="glyphicon glyphicon-remove">Remove</i>'), "x"
+        =link_to raw('<i class="glyphicon glyphicon-plus">Add</i>'), new_user_location_path(current_user)
+        =link_to raw('<i class="glyphicon glyphicon-pencil">Edit</i>'), user_locations_path(current_user)
     <br>
     .div.locations
       - current_user.locations.each do |location|
@@ -40,4 +39,4 @@
       - current_user.interests.each do |interest|
         %ul
           %li
-            #{interest.topic}
+            #{interest.topic.capitalize}

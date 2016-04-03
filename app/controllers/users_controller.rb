@@ -9,12 +9,12 @@ class UsersController < ApplicationController
   end
 
   def update
-    @user = current_user
+    @user = User.find(params[:id])
     @user.assign_attributes(user_params)
 
     if @user.save
       flash[:notice] = "User profile information was updated."
-      redirect_to user_path(current_user.id)
+      redirect_to user_path(@user.id)
     else
       flash.now[:alert] = "There was an error updating your profile. Please try again."
       render :edit
