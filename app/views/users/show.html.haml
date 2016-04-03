@@ -30,13 +30,10 @@
     .div
       %span.h2 Interests
       %small
-        =link_to raw('<i class="glyphicon glyphicon-plus">Add</i>'), "x"
-        =link_to raw('<i class="glyphicon glyphicon-pencil">Edit</i>'), "x"
-        =link_to raw('<i class="glyphicon glyphicon-remove">Remove</i>'), "x"
-
+        =link_to raw('<i class="glyphicon glyphicon-plus">Add</i>'), new_user_interest_path(current_user)
+        =link_to raw('<i class="glyphicon glyphicon-pencil">Edit</i>'), user_interests_path(current_user)
     <br>
     .div.interests
       - current_user.interests.each do |interest|
         %ul
-          %li
-            #{interest.topic.capitalize}
+          %li #{interest.topic.capitalize}
