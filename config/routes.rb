@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   resources :users, only: [:show, :index, :update] do
     resources :locations,  only: [:index, :new, :create, :destroy]
     resources :interests,  only: [:index, :new, :create, :destroy]
+    resources :friendships, only: [:index, :create, :destroy]
     member do
       get 'edit_info'
     end

@@ -1,39 +1,45 @@
 .page-header
+  - unless current_user == @user
+    .span.pull-right
+      =link_to "Send Friend Request", {controller: "friendships", action: "create", user_id: @user.id }, data: {confirm: "Send friend request to #{@user.name}?"}, class: "btn btn-success"
   %h1 User Profile
 .row
   .col-md-8
     %span.h2 My Information
-    %small
-      =link_to raw('<i class="glyphicon glyphicon-pencil">Edit</i>'), edit_info_user_path
+    - if current_user == @user
+      %small
+        =link_to raw('<i class="glyphicon glyphicon-pencil">Edit</i>'), edit_info_user_path
     .div.information
-      %h3 #{current_user.name}, #{current_user.age}, #{genderer(current_user.gender)}
+      %h3 #{@user.name}, #{@user.age}, #{genderer(@user.gender)}
       %h4
-        #{current_user.email.capitalize}<br>
+        #{@user.email.capitalize}<br>
         %small
           Confirmed?:
-          - if current_user.confirmed?
+          - if @user.confirmed?
             <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span>
           - else
             <span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span>
   .col-md-4
     .div
       %span.h2 Locations
-      %small
-        =link_to raw('<i class="glyphicon glyphicon-plus">Add</i>'), new_user_location_path(current_user)
-        =link_to raw('<i class="glyphicon glyphicon-pencil">Edit</i>'), user_locations_path(current_user)
+      - if current_user == @user
+        %small
+          =link_to raw('<i class="glyphicon glyphicon-plus">Add</i>'), new_user_location_path(current_user)
+          =link_to raw('<i class="glyphicon glyphicon-pencil">Edit</i>'), user_locations_path(current_user)
     <br>
     .div.locations
-      - current_user.locations.each do |location|
+      - @user.locations.each do |location|
         %ul
           %li #{location.zip_code}
   .col-md-8
     .div
       %span.h2 Interests
-      %small
-        =link_to raw('<i class="glyphicon glyphicon-plus">Add</i>'), new_user_interest_path(current_user)
-        =link_to raw('<i class="glyphicon glyphicon-pencil">Edit</i>'), user_interests_path(current_user)
+      - if current_user == @user
+        %small
+          =link_to raw('<i class="glyphicon glyphicon-plus">Add</i>'), new_user_interest_path(current_user)
+          =link_to raw('<i class="glyphicon glyphicon-pencil">Edit</i>'), user_interests_path(current_user)
     <br>
     .div.interests
-      - current_user.interests.each do |interest|
+      - @user.interests.each do |interest|
         %ul
           %li #{interest.topic.capitalize}

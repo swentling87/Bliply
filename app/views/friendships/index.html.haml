@@ -1,0 +1,41 @@
+.page-header
+  %h1 Friends Dashboard
+.row
+  .col-md-8
+    .div
+      %span.h2 My Friendships
+      %small
+        =link_to raw('<i class="glyphicon glyphicon-plus">Add</i>'), "x"
+    <br>
+    .div.friendships
+      - current_user.friendships.each do |friend|
+        %ul
+          - if friend.status == "confirmed"
+            #{User.find((friend.friend_id)).name}
+            %small
+              =link_to raw('<i class="glyphicon glyphicon-remove"></i>'), "x",
+              method: :delete, data: {confirm: 'Are you sure you want to remove this friend?'}
+  .col-md-4.pull-right
+    .div
+      %span.h2 Received Requests
+    .div.requested_friendships
+      - current_user.friendships.each do |friend|
+        %ul
+          - if friend.status == "requested"
+            #{User.find((friend.friend_id)).name}
+            %small
+              =link_to raw('<i class="glyphicon glyphicon-remove"></i>'), "x",
+              method: :delete, data: {confirm: 'Are you sure you want to remove this friend?'}
+              <br>
+  .row
+    .col-md-4.pull-right
+      .div
+        %span.h2 Sent Requests
+      .div.requested_friendships
+        - current_user.friendships.each do |friend|
+          %ul
+            - if friend.status == "pending"
+              #{User.find((friend.friend_id)).name}
+              %small
+                =link_to raw('<i class="glyphicon glyphicon-remove"></i>'), "x",
+                method: :delete, data: {confirm: 'Are you sure you want to cancel this request?'}
