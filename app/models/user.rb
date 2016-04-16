@@ -10,8 +10,7 @@ class User < ActiveRecord::Base
   has_many :locations, through: :locationables
 
   has_many :friendships, dependent: :destroy
-  has_many :friends, -> { where status: 'confirmed'}, through: :friendships
-  has_many :requested_friends, -> {where status: 'requested'}, through: :friendships, source: :friend
-  has_many :pending_friends, -> {where status: 'pending'}, through: :friendships, source: :friend
-
+  has_many :friends, through: :friendships
+  has_many :inverse_friendships, class_name: "Friendship", foreign_key: "friend_id"
+  has_many :inverse_friends, through: :inverse_friendships, source: :user
 end

@@ -5,7 +5,13 @@ Rails.application.routes.draw do
   resources :users, only: [:show, :index, :update] do
     resources :locations,  only: [:index, :new, :create, :destroy]
     resources :interests,  only: [:index, :new, :create, :destroy]
-    resources :friendships, only: [:index, :create, :destroy]
+    resources :friendships, only: [:index, :create, :destroy] do
+      member do
+        delete 'cancel'
+        delete 'decline'
+        get 'accept'
+      end
+    end
     member do
       get 'edit_info'
     end

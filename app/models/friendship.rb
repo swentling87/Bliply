@@ -1,14 +1,12 @@
 class Friendship < ActiveRecord::Base
   belongs_to :user
-  belongs_to :friend, class_name: "User", foreign_key: "friend_id"
+  belongs_to :friend, class_name: "User"
 
   def self.request(user, friend)
-    unless user == friend or Friendship.exists?(user, friend)
       transaction do
-        create(user: user, friend: friend, status: 'pending')
-        create(user: friend, friend: user, status: 'requested')
+        create(user_id: user.id, friend_id: friend.id, status: 'pending')
+        create(user_id: friend.id, friend_id: user.id, status: 'requested')
       end
-    end
   end
 
   def self.confirm(user, friend)
