@@ -1,39 +1,77 @@
 .page-header
+  - if current_user == @user
+    .span.pull-right
+      =link_to "Friends Dashboard", user_friendships_path(@user), class: "btn btn-success"
+  - elsif current_user.friends.include?(@user)
+    .span.pull-right
+      =link_to "Remove Friend", {controller: "friendships", user_id: current_user.id, id: @user.id, action: :destroy},
+      method: :delete, data: {confirm: "Are you sure you want to remove #{@user.name}?"}, class: "btn btn-danger"
+  - else
+    .span.pull-right
+      =link_to "Send Friend Request", {controller: "friendships", user_id: current_user.id, friend_id: @user.id},
+      method: :create, data: {confirm: "Send friend request to #{@user.name}?"}, class: "btn btn-success"
   %h1 User Profile
 .row
   .col-md-8
-    %span.h2 My Information
-    %small
-      =link_to raw('<i class="glyphicon glyphicon-pencil">Edit</i>'), edit_info_user_path
+    - if current_user == @user
+      %span.h2 My Information
+      %small
+        =link_to raw('<i class="glyphicon glyphicon-pencil">Edit</i>'), edit_info_user_path
     .div.information
-      %h3 #{current_user.name}, #{current_user.age}, #{genderer(current_user.gender)}
-      %h4
-        #{current_user.email.capitalize}<br>
-        %small
-          Confirmed?:
-          - if current_user.confirmed?
-            <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span>
-          - else
-            <span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span>
+      - friendly = current_user.friendships.select{|friend| friend.friend_id == @user.id && (friend.status == "confirmed" || friend.status == "requested")}
+      - if current_user == @user || friendly.length > 0
+        %h3
+          #{@user.name}, #{@user.age}, #{genderer(@user.gender)}
+        %h4
+          #{@user.email.capitalize}<br>
+          %small
+            .div
+              Confirmed?:
+              - if @user.confirmed?
+                <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span>
+              - else
+                <span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span>
+          -if current_user == @user
+            %small
+              .div
+                Stealth Status?:
+                - if current_user.stealth == false
+                  =link_to raw('Visible <i class="glyphicon glyphicon-eye-open"></i>'), stealth_user_path(@user, (@user.stealth = true)), method: :put
+                - else
+                  =link_to raw('Stealth <i class="glyphicon glyphicon-eye-close"></i>'), stealth_user_path(@user, (@user.stealth = false)), method: :put
+      - elsif (current_user != @user) && @user.stealth == true
+        %h3
+          #{@user.age}, #{genderer(@user.gender)}
+        %h4
+          %small
+            .div
+              Confirmed?:
+              - if @user.confirmed?
+                <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span>
+              - else
+                <span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span>
+
   .col-md-4
     .div
       %span.h2 Locations
-      %small
-        =link_to raw('<i class="glyphicon glyphicon-plus">Add</i>'), new_user_location_path(current_user)
-        =link_to raw('<i class="glyphicon glyphicon-pencil">Edit</i>'), user_locations_path(current_user)
+      - if current_user == @user
+        %small
+          =link_to raw('<i class="glyphicon glyphicon-plus">Add</i>'), new_user_location_path(current_user)
+          =link_to raw('<i class="glyphicon glyphicon-pencil">Edit</i>'), user_locations_path(current_user)
     <br>
     .div.locations
-      - current_user.locations.each do |location|
+      - @user.locations.each do |location|
         %ul
           %li #{location.zip_code}
   .col-md-8
     .div
       %span.h2 Interests
-      %small
-        =link_to raw('<i class="glyphicon glyphicon-plus">Add</i>'), new_user_interest_path(current_user)
-        =link_to raw('<i class="glyphicon glyphicon-pencil">Edit</i>'), user_interests_path(current_user)
+      - if current_user == @user
+        %small
+          =link_to raw('<i class="glyphicon glyphicon-plus">Add</i>'), new_user_interest_path(current_user)
+          =link_to raw('<i class="glyphicon glyphicon-pencil">Edit</i>'), user_interests_path(current_user)
     <br>
     .div.interests
-      - current_user.interests.each do |interest|
+      - @user.interests.each do |interest|
         %ul
           %li #{interest.topic.capitalize}
