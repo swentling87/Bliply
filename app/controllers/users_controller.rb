@@ -22,6 +22,20 @@ class UsersController < ApplicationController
     end
   end
 
+  def stealth
+    @user = current_user
+    @user.toggle! :stealth
+    if @user.stealth == true
+      @user.save
+      flash[:notice] = "You have gone to stealth mode. Your personal information is hidden."
+      redirect_to user_path(@user.id)
+    else
+      @user.save
+      flash[:notice] = "You have exited stealth mode. Your personal information is now visible."
+      redirect_to user_path(@user.id)
+    end
+  end
+
 
   private
 

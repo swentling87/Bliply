@@ -13,20 +13,44 @@
   %h1 User Profile
 .row
   .col-md-8
-    %span.h2 My Information
     - if current_user == @user
+      %span.h2 My Information
       %small
         =link_to raw('<i class="glyphicon glyphicon-pencil">Edit</i>'), edit_info_user_path
     .div.information
-      %h3 #{@user.name}, #{@user.age}, #{genderer(@user.gender)}
-      %h4
-        #{@user.email.capitalize}<br>
-        %small
-          Confirmed?:
-          - if @user.confirmed?
-            <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span>
-          - else
-            <span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span>
+      - friendly = current_user.friendships.select{|friend| friend.friend_id == @user.id && (friend.status == "confirmed" || friend.status == "requested")}
+      - if current_user == @user || friendly.length > 0
+        %h3
+          #{@user.name}, #{@user.age}, #{genderer(@user.gender)}
+        %h4
+          #{@user.email.capitalize}<br>
+          %small
+            .div
+              Confirmed?:
+              - if @user.confirmed?
+                <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span>
+              - else
+                <span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span>
+          -if current_user == @user
+            %small
+              .div
+                Stealth Status?:
+                - if current_user.stealth == false
+                  =link_to raw('Visible <i class="glyphicon glyphicon-eye-open"></i>'), stealth_user_path(@user, (@user.stealth = true)), method: :put
+                - else
+                  =link_to raw('Stealth <i class="glyphicon glyphicon-eye-close"></i>'), stealth_user_path(@user, (@user.stealth = false)), method: :put
+      - elsif (current_user != @user) && @user.stealth == true
+        %h3
+          #{@user.age}, #{genderer(@user.gender)}
+        %h4
+          %small
+            .div
+              Confirmed?:
+              - if @user.confirmed?
+                <span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span>
+              - else
+                <span class="glyphicon glyphicon-ban-circle" aria-hidden="true"></span>
+
   .col-md-4
     .div
       %span.h2 Locations

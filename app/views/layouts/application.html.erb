@@ -28,12 +28,17 @@
           <ul class="dropdown-menu">
             <% if user_signed_in? %>
             <li><%= link_to 'My Profile', user_path(current_user.id) %></li>
+            <li><%= link_to 'Friends Dashboard', user_friendships_path(current_user.id) %></li>
             <li><%= link_to 'Edit Profile', edit_user_registration_path %></li>
             <li><%= link_to "Sign Out", destroy_user_session_path, method: :delete %></li>
             <% end %>
           </ul>
         </li>
         <li class="pull-right"><%= "Signed in as: #{current_user.email.capitalize}" %></li>
+        <% friend_status = current_user.friendships.select{|friend| friend.status == "requested"} %>
+        <% if friend_status.length > 0  %>
+          <li class="pull-right"><%= link_to raw('<i class="glyphicon glyphicon-flag"></i>'), user_friendships_path(current_user) %></li>
+        <% end %>
       <% else %>
         <li class="pull-right"><%= link_to "Sign In", new_user_session_path %></li>
         <li class="pull-right"><%= link_to "Sign Up", new_user_registration_path %></li>

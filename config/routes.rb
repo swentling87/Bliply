@@ -14,6 +14,7 @@ Rails.application.routes.draw do
     end
     member do
       get 'edit_info'
+      put 'stealth'
     end
   end
 
