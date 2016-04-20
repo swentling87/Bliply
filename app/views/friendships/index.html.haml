@@ -10,7 +10,7 @@
           - if friend.status == "confirmed"
             =link_to "#{User.find((friend.friend_id)).name}", user_path(friend.friend_id)
             %small
-              =link_to raw('<i class="glyphicon glyphicon-remove"></i>'), {controller: "friendships", user_id: current_user.id, id: friend.friend_id, action: :destroy},
+              =link_to raw('<i class="glyphicon glyphicon-remove"></i>'), {controller: "friendships", user_id: current_user.id, friend_id: friend.friend_id, id: friend.id, action: :destroy},
               method: :delete, data: {confirm: "Are you sure you want to remove #{User.find(friend.friend_id).name}?"}
               <br>
       <br>
@@ -24,10 +24,10 @@
             =link_to "#{User.find((friend.friend_id)).name}", user_path(friend.friend_id)
             %small
               =link_to raw('<i class="glyphicon glyphicon-remove"></i>'),
-              {controller: "friendships", user_id: current_user.id, id: friend.friend_id, action: :decline},
+              {controller: "friendships", user_id: current_user.id, friend_id: friend.friend_id, id: friend.id, action: :decline},
               method: :delete, data: {confirm: "Are you sure you want to decline the friend request from #{User.find(friend.friend_id).name}?"}
               =link_to raw('<i class="glyphicon glyphicon-ok"></i>'),
-              {controller: "friendships", user_id: current_user.id, id: friend.friend_id, action: :accept},
+              {controller: "friendships", user_id: current_user.id, friend_id: friend.friend_id, id: friend.id, action: :accept},
               data: {confirm: "Are you sure you want to accept the friend request from #{User.find(friend.friend_id).name}?"}
               <br>
       <br>
@@ -42,6 +42,6 @@
             =link_to "#{User.find((friend.friend_id)).name}", user_path(friend.friend_id)
             %small
               =link_to raw('<i class="glyphicon glyphicon-remove"></i>'),
-              {controller: "friendships", user_id: current_user.id, id: friend.friend_id, action: :cancel},
-              method: :delete, data: {confirm: "Are you sure you want to cancel the friend request from #{User.find(friend.friend_id).name}?"}
+              {controller: "friendships", user_id: current_user.id, friend_id: friend.friend_id, id: friend.id, action: :cancel},
+              method: :delete, data: {confirm: "Are you sure you want to cancel the friend request from this user?"}
               <br>

@@ -19,7 +19,7 @@
         =link_to raw('<i class="glyphicon glyphicon-pencil">Edit</i>'), edit_info_user_path
     .div.information
       - friendly = current_user.friendships.select{|friend| friend.friend_id == @user.id && (friend.status == "confirmed" || friend.status == "requested")}
-      - if current_user == @user || friendly.length > 0
+      - if current_user == @user || friendly.length > 0 || @user.stealth == false
         %h3
           #{@user.name}, #{@user.age}, #{genderer(@user.gender)}
         %h4
