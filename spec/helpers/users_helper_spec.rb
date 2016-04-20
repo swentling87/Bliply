@@ -11,5 +11,15 @@ require 'rails_helper'
 #   end
 # end
 RSpec.describe UsersHelper, type: :helper do
-  pending "add some examples to (or delete) #{__FILE__}"
+  describe "genderer" do
+    it "labels the gender" do
+      expect(genderer(1)).to eq("Male")
+    end
+    it "labels the gender" do
+      expect(genderer(2)).to eq("Female")
+    end
+    it "labels the gender" do
+      expect(genderer(3)).to eq("Other")
+    end
+  end
 end
