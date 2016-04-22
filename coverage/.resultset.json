@@ -693,6 +693,11 @@
       "/Users/stephenwentling/Desktop/bloc/Bliply/app/helpers/friendships_helper.rb": [
         1,
         null,
+        1,
+        2,
+        2,
+        null,
+        null,
         null
       ],
       "/Users/stephenwentling/Desktop/bloc/Bliply/app/helpers/interests_helper.rb": [
@@ -1127,6 +1132,36 @@
         null,
         null
       ],
+      "/Users/stephenwentling/Desktop/bloc/Bliply/spec/helpers/friendships_helper_spec.rb": [
+        1,
+        null,
+        null,
+        1,
+        null,
+        1,
+        1,
+        1,
+        null,
+        1,
+        1,
+        1,
+        null,
+        null,
+        null,
+        null,
+        1,
+        1,
+        1,
+        null,
+        1,
+        1,
+        1,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
       "/Users/stephenwentling/Desktop/bloc/Bliply/spec/helpers/users_helper_spec.rb": [
         1,
         null,
@@ -1274,6 +1309,6 @@
         null
       ]
     },
-    "timestamp": 1461127806
+    "timestamp": 1461305524
   }
 }

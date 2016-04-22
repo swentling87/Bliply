@@ -2,14 +2,27 @@
   - if current_user == @user
     .span.pull-right
       =link_to "Friends Dashboard", user_friendships_path(@user), class: "btn btn-success"
-  - elsif current_user.friends.include?(@user)
-    .span.pull-right
-      =link_to "Remove Friend", {controller: "friendships", user_id: current_user.id, id: @user.id, action: :destroy},
-      method: :delete, data: {confirm: "Are you sure you want to remove #{@user.name}?"}, class: "btn btn-danger"
+  - elsif @user != current_user && current_user.friends.include?(@user)
+    - current_user.friendships.each do |friend|
+      - if (friend.friend_id == @user.id && friend.status == "confirmed")
+        .span.pull-right
+          =link_to "Remove Friend", {controller: "friendships", user_id: current_user.id, friend_id: @user.id, id: friend.id, action: :destroy},
+          method: :delete, data: {confirm: "Are you sure you want to remove #{@user.name}?"}, class: "btn btn-danger"
+      - elsif (friend.friend_id == @user.id && friend.status == "pending")
+        .span.pull-right
+          =link_to "Cancel Pending Request", {controller: "friendships", user_id: current_user.id, friend_id: friend.friend_id, id: friend.id, action: :cancel},
+          method: :delete, data: {confirm: "Are you sure you want to cancel the friend request to this user?"}, class: "btn btn-danger"
+      - elsif (friend.friend_id == @user.id && friend.status == "requested")
+        .span.pull-right
+          =link_to "Accept Request", {controller: "friendships", user_id: current_user.id, friend_id: friend.friend_id, id: friend.id, action: :accept},
+          data: {confirm: "Are you sure you want to accept the friend request from #{User.find(friend.friend_id).name}?"}, class: "btn btn-success"
+        .span.pull-right
+          =link_to "Decline Request", {controller: "friendships", user_id: current_user.id, friend_id: friend.friend_id, id: friend.id, action: :decline},
+          method: :delete, data: {confirm: "Are you sure you want to decline the friend request from #{User.find(friend.friend_id).name}?"}, class: "btn btn-danger"
   - else
     .span.pull-right
       =link_to "Send Friend Request", {controller: "friendships", user_id: current_user.id, friend_id: @user.id},
-      method: :create, data: {confirm: "Send friend request to #{@user.name}?"}, class: "btn btn-success"
+      method: :create, data: {confirm: "Send friend request to this user?"}, class: "btn btn-success"
   %h1 User Profile
 .row
   .col-md-8
