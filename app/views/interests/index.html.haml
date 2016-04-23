@@ -8,9 +8,13 @@
         =link_to raw('<i class="glyphicon glyphicon-plus">Add</i>'), new_user_interest_path
     <br>
     .div.interests
-      - current_user.interests.each do |interest|
+      - current_user.interestables.each do |interestly|
         %ul
-          #{interest.topic.capitalize}
+          #{Interest.find(interestly.interest_id).topic.capitalize}
           %small
-            =link_to raw('<i class="glyphicon glyphicon-remove"></i>'), [current_user, interest],
+            - if interestly.stealth == false
+              =link_to raw('Visible <i class="glyphicon glyphicon-eye-open"></i>'), stealth_user_interest_path(@user.id, interestly.id), method: :put
+            - else
+              =link_to raw('Stealth <i class="glyphicon glyphicon-eye-close"></i>'), stealth_user_interest_path(@user.id, interestly.id), method: :put
+            =link_to raw('<i class="glyphicon glyphicon-remove"></i>'), [current_user, Interest.find(interestly.interest_id)],
             method: :delete, data: {confirm: 'Are you sure you want to remove this interest?'}
