@@ -4,7 +4,11 @@ Rails.application.routes.draw do
   devise_for :users, controllers: { registrations: "registrations" }
   resources :users, only: [:show, :index, :update] do
     resources :locations,  only: [:index, :new, :create, :destroy]
-    resources :interests,  only: [:index, :new, :create, :destroy]
+    resources :interests,  only: [:index, :new, :create, :destroy] do
+      member do
+        put 'stealth'
+      end
+    end
     resources :friendships, only: [:index, :create, :destroy] do
       member do
         delete 'cancel'

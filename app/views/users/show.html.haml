@@ -85,6 +85,7 @@
           =link_to raw('<i class="glyphicon glyphicon-pencil">Edit</i>'), user_interests_path(current_user)
     <br>
     .div.interests
-      - @user.interests.each do |interest|
+      - @user.interestables.each do |interest|
         %ul
-          %li #{interest.topic.capitalize}
+        -if current_user == @user || interest.stealth == false
+          %li #{Interest.find(interest.interest_id).topic.capitalize}

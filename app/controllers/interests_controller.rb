@@ -1,6 +1,7 @@
 class InterestsController < ApplicationController
 
     def index
+      @user = User.find(params[:user_id])
     end
 
     def new
@@ -31,6 +32,22 @@ class InterestsController < ApplicationController
         redirect_to user_path(current_user.id)
       end
     end
+
+    def stealth
+      @user = User.find(params[:user_id])
+      @user_interest = @user.interestables.find(params[:id])
+      @user_interest.toggle! :stealth
+      if @user_interest.stealth == true
+        @user_interest.save
+        flash[:notice] = "You have successfully put that interest in stealth mode and it is now hidden."
+        redirect_to user_interests_path(@user.id)
+      else
+        @user_interest.save
+        flash[:notice] = "You have removed that interest from stealth mode, it is now visible."
+        redirect_to user_interests_path(@user.id)
+      end
+    end
+
 
     private
 

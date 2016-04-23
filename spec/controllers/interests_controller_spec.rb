@@ -5,7 +5,8 @@ RSpec.describe InterestsController, type: :controller do
   context "user" do
     before do
       @user = FactoryGirl.create(:user, id: 1)
-      @interest = FactoryGirl.create(:interest)
+      @interest = FactoryGirl.create(:interest, id: 2)
+      @interestable = FactoryGirl.create(:interestable, user_id: 1, interest_id: 2, id: 10)
       sign_in :user, @user
     end
 
@@ -36,6 +37,15 @@ RSpec.describe InterestsController, type: :controller do
         count = @user.interests.size
         expect(count).to eq 0
         expect(response).to redirect_to(user_path(@user.id))
+      end
+    end
+
+    describe "stealth" do
+      it "makes an interest go into stealth mode" do
+        put :stealth, user_id: @user.id, id: @interestable.id, interestable: {stealth: true, id: @interestable.id, user_id: @user.id, interest_id: @interest.id }
+        updated_interestable = @interestable
+        expect(updated_interestable.stealth).to eq true
+        expect(response).to redirect_to(user_interests_path(@user.id))
       end
     end
   end
