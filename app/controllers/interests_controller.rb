@@ -4,12 +4,18 @@ class InterestsController < ApplicationController
       @user = User.find(params[:user_id])
     end
 
+    def show
+      @interest = Interest.find(params[:id])
+    end
+
     def new
       @interest = Interest.new
     end
 
     def create
-      @interest = current_user.interests.create(interest_params)
+      @user = current_user
+      @interest = Interest.find_or_create_by(interest_params)
+      @user.interests << @interest
 
       if @interest.save
         flash[:notice] = "You successfully added a new interest!"

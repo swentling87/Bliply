@@ -1,1 +1,51 @@
-%h1 Hello I am the index, more to come soon!
+.page-header
+  - if current_user
+    .span.pull-right
+      =link_to "Friends Dashboard", user_friendships_path(current_user), class: "btn btn-success"
+    .span.pull-right
+      =link_to "Create Post", new_post_path(current_user), class: "btn btn-primary"
+  %h1 Main Dashboard
+.row
+  .col-md-12
+    .div.panel
+      %ul.list-group
+      -@posts.each do |post|
+        -if (post.postable_type == "Location")
+          - if Location.find(post.postable_id).users.include?(current_user)
+            .div.panel-body
+              %li.list-group-item
+                %span.pull-right
+                  %small #{post.created_at.strftime("%d %b. %Y %H:%M")}, #{User.find(post.user_id).name}
+                  -if post.user_id == current_user.id
+                    %small
+                      =link_to raw('<i class="glyphicon glyphicon-remove"></i>'), location_post_path(Location.find(post.postable_id).id, post.id),
+                      method: :delete, data: {confirm: 'Are you sure you want to remove this post?'}
+                #{post.body}
+                .div
+                  %small
+                    #{post.postable_type}: #{Location.find(post.postable_id).zip_code}
+        -elsif (post.postable_type == "Interest")
+          -if Interest.find(post.postable_id).users.include?(current_user)
+            .div.panel-body
+              %li.list-group-item
+                %span.pull-right
+                  %small #{post.created_at.strftime("%d %b. %Y %H:%M")}, #{User.find(post.user_id).name}
+                  -if post.user_id == current_user.id
+                    %small
+                      =link_to raw('<i class="glyphicon glyphicon-remove"></i>'), interest_post_path(Interest.find(post.postable_id).id, post.id),
+                      method: :delete, data: {confirm: 'Are you sure you want to remove this post?'}
+                #{post.body}
+                .div
+                  %small
+                    #{post.postable_type}: #{Interest.find(post.postable_id).topic}
+        -elsif post.postable_type == "User"
+          -if (@user.friends.include?(User.find(post.user_id)) && @user.friendships.find_by_friend_id(post.user_id).status == "confirmed") || @user.id == post.user_id
+            .div.panel-body
+              %li.list-group-item
+                %span.pull-right
+                  %small #{post.created_at.strftime("%d %b. %Y %H:%M")}, #{User.find(post.user_id).name}
+                  -if post.user_id == current_user.id
+                    %small
+                      =link_to raw('<i class="glyphicon glyphicon-remove"></i>'), post_path(post.user_id, post.id),
+                      method: :delete, data: {confirm: 'Are you sure you want to remove this post?'}
+                #{post.body}

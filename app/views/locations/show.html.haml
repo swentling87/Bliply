@@ -1,0 +1,29 @@
+.page-header
+  - if current_user.locations.include?(@location)
+    .span.pull-right
+      =link_to "Create Post", new_location_post_path(@location, current_user), class: "btn btn-success"
+  %h1 #{@location.zip_code} Dashboard
+.row
+  .col-md-8
+    .h2 Activity
+    .div.panel
+      %ul.list-group
+      -@location.posts.each do |post|
+        .div.panel-body
+          %li.list-group-item
+            %span.pull-right
+              %small #{post.created_at.strftime("%d %b. %Y")}, #{User.find(post.user_id).name}
+              -if post.user_id == current_user.id
+                %small
+                  =link_to raw('<i class="glyphicon glyphicon-remove"></i>'), location_post_path(@location.id, post.id),
+                  method: :delete, data: {confirm: 'Are you sure you want to remove this post?'}
+            #{post.body}
+  .col-md-4.pull-right
+    .h2 Members
+    %ul
+    - @location.users.each do |user|
+      %li
+        - if (stealthy?(user) == true)
+          =link_to "User ID: ##{user.id}", user_path(user.id)
+        - else
+          =link_to "#{user.name}", user_path(user.id)

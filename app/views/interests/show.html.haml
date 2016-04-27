@@ -1,0 +1,29 @@
+.page-header
+  - if current_user.interests.include?(@interest)
+    .span.pull-right
+      =link_to "Create Post", new_interest_post_path(@interest, current_user), class: "btn btn-success"
+  %h1 #{@interest.topic} Dashboard
+.row
+  .col-md-8
+    .h2 Activity
+    .div.panel
+      %ul.list-group
+      -@interest.posts.each do |post|
+        .div.panel-body
+          %li.list-group-item
+            %span.pull-right
+              %small #{post.created_at.strftime("%d %b. %Y")}, #{User.find(post.user_id).name}
+              -if post.user_id == current_user.id
+                %small
+                  =link_to raw('<i class="glyphicon glyphicon-remove"></i>'), interest_post_path(@interest.id, post.id),
+                  method: :delete, data: {confirm: 'Are you sure you want to remove this post?'}
+            #{post.body}
+  .col-md-4.pull-right
+    .h2 Members
+    %ul
+    - @interest.users.each do |user|
+      %li
+        - if (stealthy?(user) == true || stealthy_interest?(user.id, @interest.id) == true) && (user != current_user)
+          =link_to "User ID: ##{user.id}", user_path(user.id)
+        - else
+          =link_to "#{user.name}", user_path(user.id)

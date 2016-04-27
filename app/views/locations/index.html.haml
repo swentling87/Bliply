@@ -10,7 +10,7 @@
     .div.locations
       - current_user.locations.each do |location|
         %ul
-          #{location.zip_code}
+          =link_to "#{location.zip_code}", location_path(location.id)
           %small
             =link_to raw('<i class="glyphicon glyphicon-remove"></i>'), [current_user, location],
             method: :delete, data: {confirm: 'Are you sure you want to remove this location?'}
