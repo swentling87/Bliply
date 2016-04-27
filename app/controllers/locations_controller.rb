@@ -3,12 +3,18 @@ class LocationsController < ApplicationController
   def index
   end
 
+  def show
+    @location = Location.find(params[:id])
+  end
+
   def new
     @location = Location.new
   end
 
   def create
-    @location = current_user.locations.create(location_params)
+    @user = current_user
+    @location = Location.find_or_create_by(location_params)
+    @user.locations << @location
 
     if @location.save
       flash[:notice] = "You successfully added a new location!"

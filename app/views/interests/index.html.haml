@@ -9,12 +9,13 @@
     <br>
     .div.interests
       - current_user.interestables.each do |interestly|
-        %ul
-          #{Interest.find(interestly.interest_id).topic.capitalize}
-          %small
-            - if interestly.stealth == false
-              =link_to raw('Visible <i class="glyphicon glyphicon-eye-open"></i>'), stealth_user_interest_path(@user.id, interestly.id), method: :put
-            - else
-              =link_to raw('Stealth <i class="glyphicon glyphicon-eye-close"></i>'), stealth_user_interest_path(@user.id, interestly.id), method: :put
+        %ul.list-group
+          %li.list-group-item
+            =link_to "#{Interest.find(interestly.interest_id).topic.capitalize}", interest_path(interestly.interest_id)
             =link_to raw('<i class="glyphicon glyphicon-remove"></i>'), [current_user, Interest.find(interestly.interest_id)],
             method: :delete, data: {confirm: 'Are you sure you want to remove this interest?'}
+            %small.pull-right
+              - if interestly.stealth == false
+                =link_to raw('Visible <i class="glyphicon glyphicon-eye-open"></i>'), stealth_user_interest_path(@user.id, interestly.id), method: :put
+              - else
+                =link_to raw('Stealth <i class="glyphicon glyphicon-eye-close"></i>'), stealth_user_interest_path(@user.id, interestly.id), method: :put

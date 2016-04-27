@@ -19,7 +19,16 @@ Rails.application.routes.draw do
     member do
       get 'edit_info'
       put 'stealth'
+      resources :posts, only: [:new, :create, :destroy]
     end
+  end
+
+  resources :locations, only: [:show] do
+    resources :posts, only: [:new, :create, :destroy]
+  end
+
+  resources :interests, only: [:show] do
+    resources :posts, only: [:new, :create, :destroy]
   end
 
   root 'welcome#welcome'

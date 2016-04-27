@@ -71,11 +71,11 @@
         %small
           =link_to raw('<i class="glyphicon glyphicon-plus">Add</i>'), new_user_location_path(current_user)
           =link_to raw('<i class="glyphicon glyphicon-pencil">Edit</i>'), user_locations_path(current_user)
-    <br>
     .div.locations
       - @user.locations.each do |location|
         %ul
-          %li #{location.zip_code}
+          %li
+            =link_to "#{location.zip_code}", location_path(location.id)
   .col-md-8
     .div
       %span.h2 Interests
@@ -83,9 +83,9 @@
         %small
           =link_to raw('<i class="glyphicon glyphicon-plus">Add</i>'), new_user_interest_path(current_user)
           =link_to raw('<i class="glyphicon glyphicon-pencil">Edit</i>'), user_interests_path(current_user)
-    <br>
-    .div.interests
+    .div.information.interests
       - @user.interestables.each do |interest|
         %ul
         -if current_user == @user || interest.stealth == false
-          %li #{Interest.find(interest.interest_id).topic.capitalize}
+          %li
+            =link_to "#{Interest.find(interest.interest_id).topic.capitalize}", interest_path(interest.interest_id)
