@@ -60,6 +60,9 @@ RSpec.describe PostsController, type: :controller do
     end
 
     describe "DELETE destroy" do
+      before do
+        request.env["HTTP_REFERER"] = users_path(@user)
+      end
       it "deletes the user post" do
         delete :destroy, id: @u_post.id, user_id: @user.id
         count = Post.where({id: @u_post.id}).size
@@ -70,13 +73,13 @@ RSpec.describe PostsController, type: :controller do
         delete :destroy, id: @l_post.id, location_id: @location.id
         count = Post.where({id: @l_post.id}).size
         expect(count).to eq 0
-        expect(response).to redirect_to(location_path(@location))
+        expect(response).to redirect_to(users_path(@user))
       end
       it "deletes the interest post" do
         delete :destroy, id: @i_post.id, interest_id: @interest.id
         count = Post.where({id: @i_post.id}).size
         expect(count).to eq 0
-        expect(response).to redirect_to(interest_path(@interest))
+        expect(response).to redirect_to(users_path(@user))
       end
     end
   end
