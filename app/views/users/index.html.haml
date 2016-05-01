@@ -17,7 +17,12 @@
             .div.panel-body
               %li.list-group-item
                 %span.pull-right
-                  %small #{post.created_at.strftime("%d %b. %Y %H:%M")}, #{post_user.name}
+                  - if friendly?(current_user.id, post_user.id) == true || current_user.id == post.user_id || stealthy?(post_user.id) == false
+                    %small
+                      #{post.created_at.strftime("%d %b. %Y")},
+                      =link_to "#{post_user.name}", user_path(post_user.id)
+                  - else
+                    %small #{post.created_at.strftime("%d %b. %Y")}, Anonymous User
                   -if post.user_id == current_user.id
                     %small
                       =link_to raw('<i class="glyphicon glyphicon-remove"></i>'), location_post_path(location.id, post.id),
@@ -32,7 +37,12 @@
             .div.panel-body
               %li.list-group-item
                 %span.pull-right
-                  %small #{post.created_at.strftime("%d %b. %Y %H:%M")}, #{post_user.name}
+                  - if (stealthy_interest?(post.user_id, interest.id) == true || stealthy?(post_user.id)) && post_user != current_user
+                    %small #{post.created_at.strftime("%d %b. %Y")}, Anonymous User
+                  - elsif stealthy_interest?(post.user_id, interest.id) == false || (current_user.friends.include?(post_user) && current_user.friendships.find_by_friend_id(post.user_id).status == "confirmed") || current_user.id == post.user_id
+                    %small
+                      #{post.created_at.strftime("%d %b. %Y")},
+                      =link_to "#{User.find(post.user_id).name}", user_path(post_user.id)
                   -if post.user_id == current_user.id
                     %small
                       =link_to raw('<i class="glyphicon glyphicon-remove"></i>'), interest_post_path(interest.id, post.id),
@@ -40,13 +50,15 @@
                 #{post.body}
                 .div
                   %small
-                    #{post.postable_type}: #{Interest.find(post.postable_id).topic}
+                    #{post.postable_type}: #{Interest.find(post.postable_id).topic.capitalize}
         -elsif post.postable_type == "User"
           -if (current_user.friends.include?(post_user) && current_user.friendships.find_by_friend_id(post.user_id).status == "confirmed") || current_user.id == post.user_id
             .div.panel-body
               %li.list-group-item
                 %span.pull-right
-                  %small #{post.created_at.strftime("%d %b. %Y %H:%M")}, #{User.find(post.user_id).name}
+                  %small
+                    #{post.created_at.strftime("%d %b. %Y %H:%M")},
+                    =link_to "#{User.find(post.user_id).name}", user_path(post_user.id)
                   -if post.user_id == current_user.id
                     %small
                       =link_to raw('<i class="glyphicon glyphicon-remove"></i>'), post_path(post.user_id, post.id),

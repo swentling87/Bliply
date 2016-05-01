@@ -2,17 +2,21 @@
   - if current_user.interests.include?(@interest)
     .span.pull-right
       =link_to "Create Post", new_interest_post_path(@interest, current_user), class: "btn btn-success"
-  %h1 #{@interest.topic} Dashboard
+  %h1 #{@interest.topic.capitalize} Dashboard
 .row
   .col-md-8
     .h2 Activity
     .div.panel
       %ul.list-group
       -@interest.posts.each do |post|
+      - post_user = User.find(post.user_id)
         .div.panel-body
           %li.list-group-item
             %span.pull-right
-              %small #{post.created_at.strftime("%d %b. %Y")}, #{User.find(post.user_id).name}
+              - if (stealthy_interest?(post.user_id, @interest.id) == true || stealthy?(post_user.id)) && post_user != current_user
+                %small #{post.created_at.strftime("%d %b. %Y")}, Anonymous User
+              - elsif stealthy_interest?(post.user_id, @interest.id) == false || (current_user.friends.include?(post_user) && current_user.friendships.find_by_friend_id(post.user_id).status == "confirmed") || current_user.id == post.user_id
+                %small #{post.created_at.strftime("%d %b. %Y")}, #{User.find(post.user_id).name}
               -if post.user_id == current_user.id
                 %small
                   =link_to raw('<i class="glyphicon glyphicon-remove"></i>'), interest_post_path(@interest.id, post.id),
@@ -22,8 +26,7 @@
     .h2 Members
     %ul
     - @interest.users.each do |user|
-      %li
-        - if (stealthy?(user) == true || stealthy_interest?(user.id, @interest.id) == true) && (user != current_user)
-          =link_to "User ID: ##{user.id}", user_path(user.id)
-        - else
+      - if (stealthy?(user) == true || stealthy_interest?(user.id, @interest.id) == true) && (user != current_user)
+      - else
+        %li
           =link_to "#{user.name}", user_path(user.id)

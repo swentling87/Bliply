@@ -31,8 +31,7 @@
       %small
         =link_to raw('<i class="glyphicon glyphicon-pencil">Edit</i>'), edit_info_user_path
     .div.information
-      - friendly = current_user.friendships.select{|friend| friend.friend_id == @user.id && (friend.status == "confirmed" || friend.status == "requested")}
-      - if current_user == @user || friendly.length > 0 || @user.stealth == false
+      - if current_user == @user || friendly?(current_user.id, @user.id) == true || @user.stealth == false
         %h3
           #{@user.name}, #{@user.age}, #{genderer(@user.gender)}
         %h4
@@ -54,7 +53,7 @@
                   =link_to raw('Stealth <i class="glyphicon glyphicon-eye-close"></i>'), stealth_user_path(@user, (@user.stealth = false)), method: :put
       - elsif (current_user != @user) && @user.stealth == true
         %h3
-          #{@user.age}, #{genderer(@user.gender)}
+          Anonymous User, #{@user.age}, #{genderer(@user.gender)}
         %h4
           %small
             .div
@@ -84,8 +83,8 @@
           =link_to raw('<i class="glyphicon glyphicon-plus">Add</i>'), new_user_interest_path(current_user)
           =link_to raw('<i class="glyphicon glyphicon-pencil">Edit</i>'), user_interests_path(current_user)
     .div.information.interests
-      - @user.interestables.each do |interest|
+      - @user.interests.each do |interest|
         %ul
-        -if current_user == @user || interest.stealth == false
+        -if current_user == @user || stealthy_interest?(@user.id, interest.id) == false
           %li
-            =link_to "#{Interest.find(interest.interest_id).topic.capitalize}", interest_path(interest.interest_id)
+            =link_to "#{Interest.find(interest.id).topic.capitalize}", interest_path(interest.id)
