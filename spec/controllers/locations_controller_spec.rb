@@ -5,13 +5,21 @@ RSpec.describe LocationsController, type: :controller do
   context "user" do
     before do
       @user = FactoryGirl.create(:user, id: 1)
-      @location = FactoryGirl.create(:location)
+      @location = FactoryGirl.create(:location, id: 2)
+      @locationable = FactoryGirl.create(:locationable, user_id: 1, location_id: 2, id: 10)
       sign_in :user, @user
     end
 
     describe "GET #index" do
       it "returns http success" do
         get :index, {user_id: @user.id}
+        expect(response).to have_http_status(:success)
+      end
+    end
+
+    describe "get #show" do
+      it "returns http success" do
+        get :show, {id: @location.id}
         expect(response).to have_http_status(:success)
       end
     end
@@ -31,12 +39,15 @@ RSpec.describe LocationsController, type: :controller do
     end
 
     describe "destroy location" do
-      it "destroys an location" do
-        delete :destroy, user_id: @user.id, id: @location.id
-        count = @user.locations.size
+      it "destroys a locationable and location" do
+        delete :destroy, user_id: @user.id, id: @location.id, locationable: {id: @locationable.id, user_id: @user.id, location_id: @location.id}
+        count = Locationable.where({id: @locationable.id}).size
+        l_count = @user.locations.size
         expect(count).to eq 0
+        expect(l_count).to eq 0
         expect(response).to redirect_to(user_path(@user.id))
       end
     end
+
   end
 end

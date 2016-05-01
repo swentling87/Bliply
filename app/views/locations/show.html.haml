@@ -9,10 +9,16 @@
     .div.panel
       %ul.list-group
       -@location.posts.each do |post|
+      - post_user = User.find(post.user_id)
         .div.panel-body
           %li.list-group-item
             %span.pull-right
-              %small #{post.created_at.strftime("%d %b. %Y")}, #{User.find(post.user_id).name}
+              - if friendly?(current_user.id, post_user.id) == true || current_user.id == post.user_id || stealthy?(post_user.id) == false
+                %small #{post.created_at.strftime("%d %b. %Y")},
+                =link_to "#{post_user.name}", user_path(post_user.id)
+              - else
+                %small #{post.created_at.strftime("%d %b. %Y")},
+                =link_to "Anonymous User", user_path(post_user.id)
               -if post.user_id == current_user.id
                 %small
                   =link_to raw('<i class="glyphicon glyphicon-remove"></i>'), location_post_path(@location.id, post.id),
@@ -22,8 +28,9 @@
     .h2 Members
     %ul
     - @location.users.each do |user|
-      %li
-        - if (stealthy?(user) == true)
-          =link_to "User ID: ##{user.id}", user_path(user.id)
-        - else
+      - if friendly?(current_user.id, user.id) == true || user == current_user || stealthy?(user.id) == false
+        %li
           =link_to "#{user.name}", user_path(user.id)
+      -elsif stealthy?(user.id) == true
+        %li
+          =link_to "Anonymous User", user_path(user.id)

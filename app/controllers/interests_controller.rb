@@ -2,6 +2,7 @@ class InterestsController < ApplicationController
 
     def index
       @user = User.find(params[:user_id])
+      @interestable = Interestable.find_by_user_id_and_interest_id(:user_id, :interest_id)
     end
 
     def show
@@ -13,29 +14,38 @@ class InterestsController < ApplicationController
     end
 
     def create
-      @user = current_user
-      @interest = Interest.find_or_create_by(interest_params)
-      @user.interests << @interest
+      if interest_params.present?
+        interest_params[:topic].downcase!
+        @user = current_user
+        @interest = Interest.find_or_create_by(interest_params)
+        @user.interests << @interest
 
-      if @interest.save
-        flash[:notice] = "You successfully added a new interest!"
-        redirect_to user_path(current_user.id)
-      else
-        flash.now[:alert] = "There was an error saving that interest. Please try again."
-        redirect_to user_path(current_user.id)
+        if @interest.save
+          flash[:notice] = "You successfully added a new interest!"
+          redirect_to user_path(current_user.id)
+        else
+          flash.now[:alert] = "There was an error saving that interest. Please try again."
+          redirect_to user_path(current_user.id)
+        end
       end
     end
 
     def destroy
-      @user = User.find(params[:user_id])
+      @user = current_user
       @interest = Interest.find(params[:id])
-
-      if @interest.destroy
+      @interestable = Interestable.find_by_user_id_and_interest_id(@user.id, @interest.id)
+      @posts = @interest.posts.where(user_id: @user.id)
+      if @interestable.destroy
+        @posts.destroy_all
         flash[:notice] = "You successfully removed that interest."
         redirect_to user_path(current_user.id)
       else
         flash.now[:alert] = "There was an error deleting that interest. Please try again."
         redirect_to user_path(current_user.id)
+      end
+
+      if @interest.users.count == 0
+        @interest.destroy
       end
     end
 

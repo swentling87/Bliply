@@ -26,15 +26,22 @@ class LocationsController < ApplicationController
   end
 
   def destroy
-    @user = User.find(params[:user_id])
-    @location = Location.find(params[:id])
 
-    if @location.destroy
+    @user = current_user
+    @location = Location.find(params[:id])
+    @locationable = Locationable.find_by_user_id_and_location_id(@user.id, @location.id)
+    @posts = @location.posts.where(user_id: @user.id)
+    if @locationable.destroy
+      @posts.destroy_all
       flash[:notice] = "You successfully removed that location."
       redirect_to user_path(current_user.id)
     else
       flash.now[:alert] = "There was an error deleting that location. Please try again."
       redirect_to user_path(current_user.id)
+    end
+
+    if @location.users.count == 0
+      @location.destroy
     end
   end
 

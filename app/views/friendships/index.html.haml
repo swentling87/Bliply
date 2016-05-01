@@ -46,7 +46,7 @@
               method: :delete, data: {confirm: "Are you sure you want to cancel the friend request to #{User.find(friend.friend_id).name}?"}
               <br>
           - elsif friend.status == "pending" && stealthy?(friend.friend_id) == true
-            =link_to "User ID: ##{friend.friend_id}", user_path(friend.friend_id)
+            =link_to "Anonymous User", user_path(friend.friend_id)
             %small
               =link_to raw('<i class="glyphicon glyphicon-remove"></i>'),
               {controller: "friendships", user_id: current_user.id, friend_id: friend.friend_id, id: friend.id, action: :cancel},
