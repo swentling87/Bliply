@@ -1,8 +1,6 @@
 .page-header
   - if current_user
     .span.pull-right
-      =link_to "Friends Dashboard", user_friendships_path(current_user), class: "btn btn-success"
-    .span.pull-right
       =link_to "Create Post", new_post_path(current_user), class: "btn btn-primary"
   %h1 Main Dashboard
 .row
